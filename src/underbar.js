@@ -320,7 +320,22 @@
     // _.memoize should return a function that, when called, will check if it has
     // already computed the result for the given argument and return that value
     // instead if possible.
-    _.memoize = function(func) {};
+    _.memoize = function(func) {
+      var storage = {};
+      // storage key will be arguments and properties for key will be results that the arguments put out with the function
+      return function() {
+        //check if storage has current key
+        // var args = Array.prototype.slice.call(arguments);
+        var key = Array.prototype.slice.call(arguments).join('');
+        // if storage does have the key, then return value at t()hat key
+        if (!storage.hasOwnProperty(key)) {
+          storage[key] = func.apply(this, arguments);
+        }
+        return storage[key]; 
+
+        // if it doesn't have the key, we need to push the argument as key and results as value into storage and return result of function
+      };
+    };
 
     // Delays a function for the given number of milliseconds, and then calls
     // it with the arguments supplied.
@@ -328,7 +343,12 @@
     // The arguments for the original function are passed after the wait
     // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
     // call someFunction('a', 'b') after 500ms
-    _.delay = function(func, wait) {};
+    _.delay = function(func, wait) {
+      var args = Array.prototype.slice.call(arguments).slice(2);
+      setTimeout(function(){
+        func.apply(this, args);
+      }, wait);
+    };
 
 
     /**
@@ -341,7 +361,19 @@
     // TIP: This function's test suite will ask that you not modify the original
     // input array. For a tip on how to make a copy of an array, see:
     // http://mdn.io/Array.prototype.slice
-    _.shuffle = function(array) {};
+    _.shuffle = function(array) {
+      // copy input array.slice()
+      var results = [],
+          arr = array.slice(),
+          randIndex;
+
+      for(var i = 0; i < array.length; i++){
+        randIndex = Math.floor(Math.random() * arr.length);
+        results.push(arr[randIndex]);
+        arr.splice(randIndex, 1);
+      }
+      return results;
+    };
 
 
     /**
