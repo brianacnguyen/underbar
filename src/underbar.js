@@ -386,7 +386,21 @@
 
     // Calls the method named by functionOrKey on each value in the list.
     // Note: You will need to learn a bit about .apply to complete this.
-    _.invoke = function(collection, functionOrKey, args) {};
+    _.invoke = function(collection, functionOrKey, args) {
+      // figure out what function we're using
+      // set up a variable for a functionOrKey
+      // astring['toUpperCase']() --> as a method == astring.toUppercase()
+      // 
+      collection = _.map(collection, function(value) {
+        if (typeof functionOrKey === 'function') {
+          return functionOrKey.apply(value);
+        }
+        else {
+          return value[functionOrKey](); 
+        }
+      })
+      return collection;
+    };
 
     // Sort the object's values by a criterion produced by an iterator.
     // If iterator is a string, sort objects by that property with the name
